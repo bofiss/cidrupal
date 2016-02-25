@@ -1,0 +1,19 @@
+{
+    "name": "vbelle/cidrupal",
+    "authors": [
+        {
+            "name": "Belle",
+            "email": "bofiss@gmail.com"
+        }
+    ],
+    "require": {
+        "drupal/drupal-extension": "~3.0",
+        "drush/drush": "^8.0"
+    },
+
+    "config": {
+       "bin-dir": "bin/"
+     }
+
+
+}
