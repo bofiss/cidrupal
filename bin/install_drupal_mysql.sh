@@ -10,7 +10,7 @@
 rm -rf html
 $BASEDIR\vendor\bin\drush  make -y --force-complete drupal.make html
 cd html
-$BASEDIR\vendor\bin\drush si -y standard --db-url=mysql://root@localhost/dp7 --account-name=admin --account-pass=admin
+$BASEDIR\vendor\bin\drush si -y standard --db-url=mysql://root@localhost/cidrupal --db-su='root' --db-su-pw='' --account-name=admin --account-pass=admin
 
 
 # drush quick install
