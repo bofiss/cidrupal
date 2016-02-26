@@ -26,9 +26,9 @@ install:
 before_script:
   - echo "sendmail_path='true'" >> `php --ini | grep "Loaded Configuration" | awk '{print $4}'`
   - rm -rf html
-  - $BASEDIR\vendor\bin\drush  make -y --force-complete drupal.make html
+  - $BASEDIR/vendor/bin/drush  make -y --force-complete drupal.make html
   - cd html
-  - $BASEDIR\vendor\bin\drush si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
+  - $BASEDIR/vendor/bin/drush si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
   - $BASEDIR/vendor/bin/drush runserver --server=builtin 8080 --strict=0 &
   - cd ..
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do sleep 0.2; done
