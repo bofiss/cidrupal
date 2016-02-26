@@ -20,6 +20,9 @@ before_install:
   - export BASEDIR=${PWD}
 
 install:
+  - pear upgrade –force Console_Getopt
+  - pear upgrade –force pear
+  - pear upgrade-all
   - pear channel-discover pear.drush.org
   - pear install drush/drush
   - pear install pear/PHP_CodeSniffer
