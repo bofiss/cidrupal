@@ -8,6 +8,7 @@ env:
     - DB_USERNAME='root'
     - DB_ENCODE='utf8'
 
+sudo: required
 mysql:
   database: $DATABASE
   username: $DB_USERNAME
@@ -15,20 +16,23 @@ mysql:
 
 before_install:
   - composer self-update
+  - pear channel-discover pear.drush.org
   - export BASEDIR=${PWD}
 
 install:
   - phpenv rehash
+  - pear install drush/drush
   - composer install
 
 before_script:
   - echo "sendmail_path='true'" >> `php --ini | grep "Loaded Configuration" | awk '{print $4}'`
-  - ./bin/install_drupal_mysql.sh
+  - drush make -y --force-complete drupal.make html
   - cd html
-  - $BASEDIR/vendor/bin/drush runserver --server=builtin 8080 --strict=0 &
+  - drush si -y standard --db-url=mysql://$DB_USERNAME@localhost/$DATABASE --db-su='root' --db-su-pw='' --account-name=admin --account-pass=admin
+  - drush --yes site-install minimal --db-url="mysql://$DB_USERNAME@127.0.0.1/$DATABASE"
+  - drush --yes en simpletest
   - cd ..
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do sleep 0.2; done
 
 script:
   - $BASEDIR/vendor/bin/behat
-sudo: required
