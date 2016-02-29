@@ -11,5 +11,3 @@ projects[drupal][version] = "7.42"
 ; Store all contrib modules in the "contrib" subdirectory of
 ; sites/all/modules.
 defaults[projects][subdir] = "contrib"
-
-cd
