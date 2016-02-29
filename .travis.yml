@@ -20,7 +20,6 @@ before_install:
   - export BASEDIR=${PWD}
 
 install:
-  - pear upgrade –force Console_Getopt
   - pear upgrade –force pear
   - pear upgrade-all
   - pear channel-discover pear.drush.org
