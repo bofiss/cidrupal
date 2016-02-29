@@ -17,6 +17,6 @@
 
     "config": {
           "bin-dir": "bin/",
-          "vendor-dir": "vendor/bin/",
+          "vendor-dir": "vendor/bin/"
       }
 }
