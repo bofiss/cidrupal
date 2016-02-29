@@ -1,10 +1,7 @@
 language: php
 
 php:
-  - 5.3
   - 5.4
-  - 5.5
-  - 5.6
   - hhvm
 
 matrix:
@@ -42,7 +39,7 @@ before_script:
   - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php --yes core-quick-drupal --profile=testing --no-server --db-url=mysql://root:@127.0.0.1/cidrupal --enable=simpletest
 
   # start a web server on port 8080, run in the background; wait for initialization
-  - drush runserver 127.0.0.1:8080 &
+  - sudo drush runserver 127.0.0.1:8080 &
   - cd ..
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
