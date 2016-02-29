@@ -47,4 +47,4 @@ before_script:
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
 script:
-  - behat
+  - $BASEDIR/vendor/bin/behat
