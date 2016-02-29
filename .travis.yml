@@ -10,7 +10,7 @@ matrix:
 
 mysql:
   database: cidrupal
-  username: root
+  username: roo
   encoding: utf8
 
 before_install:
@@ -45,4 +45,4 @@ before_script:
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
 script:
-  - ${PWD}/bin/behat
+  - ${PWD}/vendor/bin/behat
