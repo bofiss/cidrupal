@@ -1,13 +1,14 @@
 language: php
 
 php:
+  - 5.3
   - 5.4
-  - hhvm
+  - 5.5
+  - 5.6
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: hhvm
+
 
 mysql:
   database: cidrupal
@@ -16,6 +17,7 @@ mysql:
 
 before_install:
   - sudo apt-get update > /dev/null
+  - export BASEDIR=${PWD}
 
 install:
   # install php packages required for running a web server from drush on php 5.3
@@ -31,6 +33,7 @@ install:
 
 before_script:
   # navigate out of module directory to prevent blown stack by recursive module lookup
+
   # create new site, stubbing sendmail path with true to prevent delivery errors and manually resolving drush path
   - rm -rf html
   - mysql -e 'create database cidupal'
@@ -39,7 +42,7 @@ before_script:
   - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php --yes core-quick-drupal --profile=testing --no-server --db-url=mysql://root:@127.0.0.1/cidrupal --enable=simpletest
 
   # start a web server on port 8080, run in the background; wait for initialization
-  - sudo drush runserver 127.0.0.1:8080 &
+  - php -S localhost:8000 &
   - cd ..
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
