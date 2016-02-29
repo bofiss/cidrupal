@@ -1,44 +1,50 @@
 language: php
+
 php:
+  - 5.3
+  - 5.4
+  - 5.5
   - 5.6
+  - hhvm
 
-env:
-  global:
-    - DATABASE='cidrupal'
-    - DB_USERNAME='root'
-    - DB_ENCODE='utf8'
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: hhvm
 
-sudo: required
 mysql:
-  database: $DATABASE
-  username: $DB_USERNAME
-  encoding: $DB_ENCODE
-
+  database: cidrupal
+  username: root
+  encoding: utf8
 
 before_install:
-  - composer self-update
-  - export BASEDIR=${PWD}
+  - sudo apt-get update > /dev/null
 
 install:
-  - pear upgrade –force pear
-  - pear upgrade-all
-  - pear channel-discover pear.drush.org
-  - pear install drush/drush
-  - pear install pear/PHP_CodeSniffer
-  - phpenv rehash
+  # install php packages required for running a web server from drush on php 5.3
+  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
+
+  # add composer's global bin directory to the path
+  # see: https://github.com/drush-ops/drush#install---composer
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+
+  # install drush globally
+  - composer global require drush/drush:6.*
   - composer install
 
 before_script:
-  - drush status
-  - sudo chmod -R 777 sites/all/modules
-  - echo "sendmail_path='true'" >> `php --ini | grep "Loaded Configuration" | awk '{print $4}'`; export UNISH_DRUSH="${PWD}/drush"
+  # navigate out of module directory to prevent blown stack by recursive module lookup
+  - cd ../..
+
+  # create new site, stubbing sendmail path with true to prevent delivery errors and manually resolving drush path
   - rm -rf html
-  - drush  make -y --force-complete drupal.make html
+  - mysql -e 'create database cidupal'
   - cd html
-  - drush si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
-  - drush runserver --server=builtin 8080 --strict=0 &
-  - cd ..
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do sleep 0.2; done
+  - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php --yes core-quick-drupal --profile=testing --no-server --db-url=mysql://root:@127.0.0.1/cidrupal --enable=simpletest
+
+  # start a web server on port 8080, run in the background; wait for initialization
+  - drush runserver 127.0.0.1:8080 &
+  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
 script:
   - $BASEDIR/vendor/bin/behat
