@@ -43,7 +43,6 @@ before_script:
   - php -S localhost:8080 &
   - cd ..
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
-  - cd html
 
 script:
   - vendor/behat/behat/bin/behat
