@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 
+<<<<<<< HEAD
 dir=$(d=${0%[/\\]*}; cd "$d"; cd "../vendor/drush/drush" && pwd)
+=======
+dir=$(d=${0%[/\\]*}; cd "$d"; cd "../vendor/bin/drush/drush" && pwd)
+>>>>>>> 7bcae3dbd7620b15e30bc4c97aed4bb0c191de65
 
 # See if we are running in Cygwin by checking for cygpath program
 if command -v 'cygpath' >/dev/null 2>&1; then
