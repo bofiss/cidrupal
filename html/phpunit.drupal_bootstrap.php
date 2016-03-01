@@ -23,7 +23,7 @@ $http_host = 'localhost';
 function guessDrupalRootPath() {
   $path = getcwd();
   while ($path != '/') {
-    if (file_exists($path . 'html/includes/bootstrap.inc')) {
+    if (file_exists($path . '/includes/bootstrap.inc')) {
       break;
     }
     $path = dirname($path);
@@ -32,7 +32,7 @@ function guessDrupalRootPath() {
 }
 
 $_SERVER['HTTP_HOST'] = $http_host;
-$_SERVER['SCRIPT_NAME'] = 'html/index.php';
+$_SERVER['SCRIPT_NAME'] = '/index.php';
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_SERVER['SERVER_NAME'] = NULL;
@@ -40,5 +40,5 @@ $_SERVER['SERVER_SOFTWARE'] = NULL;
 $_SERVER['HTTP_USER_AGENT'] = NULL;
 
 define('DRUPAL_ROOT', $drupal_root);
-require_once DRUPAL_ROOT . 'html/includes/bootstrap.inc';
+require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
