@@ -37,7 +37,7 @@ before_script:
   - mysql -e 'create database cidupal'
   - drush  make -y --force-complete drupal.make html
   - cd html
-  - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin --enable=simpletest
+  - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
 
   # start a web server on port 8080, run in the background; wait for initialization
   - php -S localhost:8080 &
