@@ -46,4 +46,4 @@ before_script:
 
 script:
   - vendor/behat/behat/bin/behat
-  - bin/phpunit/phpunit
+  - vendor/phpunit/phpunit/phpunit
