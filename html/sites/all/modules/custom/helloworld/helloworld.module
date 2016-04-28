@@ -1,1 +1,13 @@
 <?php
+
+/**
+* Implements hook_help().
+*/
+
+function helloworld_help($path, $arg){
+  switch($path){
+    case 'admin/help#helloworld':
+      return '<p>Hello world help.</p>';
+      break;
+  }
+}
