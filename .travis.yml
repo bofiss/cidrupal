@@ -1,49 +1,39 @@
 language: php
-
 php:
-  - 5.6
-  - 7
-
+- 5.6
+- 7
 matrix:
   fast_finish: true
-
-
 mysql:
   database: cidrupal
   username: roo
   encoding: utf8
-
 before_install:
-  - sudo apt-get update > /dev/null
-  - export BASEDIR=${PWD}
-
+- sudo apt-get update > /dev/null
+- export BASEDIR=${PWD}
 install:
-  # install php packages required for running a web server from drush on php 5.3
-  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
-
-  # add composer's global bin directory to the path
-  # see: https://github.com/drush-ops/drush#install---composer
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-
-  # install drush globally
-  - composer global require drush/drush:6.*
-  - composer install
-
+- sudo apt-get install -y --force-yes php5-cgi php5-mysql
+- export PATH="$HOME/.composer/vendor/bin:$PATH"
+- composer global require drush/drush:6.*
+- composer install
 before_script:
-  # navigate out of module directory to prevent blown stack by recursive module lookup
-
-  # create new site, stubbing sendmail path with true to prevent delivery errors and manually resolving drush path
-  - rm -rf html
-  - mysql -e 'create database cidupal'
-  - drush  make -y --force-complete drupal.make html
-  - cd html
-  - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
-
-  # start a web server on port 8080, run in the background; wait for initialization
-  - php -S localhost:8080 &
-  - cd ..
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
-
+- rm -rf html
+- mysql -e 'create database cidupal'
+- drush  make -y --force-complete drupal.make html
+- cd html
+- php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard
+  --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
+- php -S localhost:8080 &
+- cd ..
+- until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 script:
-  - vendor/behat/behat/bin/behat
-  - vendor/phpunit/phpunit/phpunit
+- vendor/behat/behat/bin/behat
+- vendor/phpunit/phpunit/phpunit
+env:
+  global:
+    secure: bLhWRblUtNoqOhPqc2LuPLzKpMsd8cIiUP02tyxCczHVRmbAa7lLUNkvD84COe/ZogNWtZRbhLjQKp6eWu7LmKd2qs2vfl9V5MqxxoTaCU+h9Du38MyuZQUsO3FSVuD0k60UH8t6mFe5+KDzjYM/i6X/KxCx9//z4FjbZbHoOqDN7tVrGWFte10DGSCCLb9lf36HjdqBMHCwBqZA3DutYLf55Kg0C3ZRH/7XkP9wvDd/KkT7uSN490ekXkKLVXgtEnC9I8EEaL1YfMuIHvfA4YLwpDqZMZqIDMIrh/ZzEAttgTdnjxLiHpqiH7dMf9UiQ2AxeIRq3GiTtKokVUmTKGaVMHiJQiHbx2rzj51Ytsg0oX+QnT6W1PwV2qtKIAXXqXm8iRfEE/u1HiqpKFgqqGPPQHh6TYZh/ZwSN8F2k95foNJZL0NxqJoeKWn1qtz3er6RNhOP2CyOd40fIiO2HWmyYDfl+ViYFHpElIQwVnNxP1GJpfOPQixa6rAQj6HhyaNEhBOvXt9QBpWiXSp/3t91li437UzzJ2EDhLXU7I3GwRxHDF8qYCcYaowDhU2kiEPCHxLfzEiEYFIzr5ipNyBjU7HcuOnPBFCEIMjcW1euY6aLUaK4SQKP8xDdEMvTbMXguxBhHzbwJIgO4lolKuh9hjZSWDwTbvBrEw0gQU0=
+after_success:
+- "curl -o /tmp/travis-automerge https://raw.githubusercontent.com/cdown/travis-automerge/master/travis-automerge"
+- "chmod a+x /tmp/travis-automerge"
+- "BRANCHES_TO_MERGE_REGEX='testing/' BRANCH_TO_MERGE_INTO=preprod GITHUB_REPO=bofiss/cidrupal /tmp/travis-automerge"
+- "BRANCHES_TO_MERGE_REGEX='preprod/' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=bofiss/cidrupal /tmp/travis-automerge"
