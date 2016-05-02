@@ -49,5 +49,5 @@ after_success:
 - chmod a+x merge.sh
 - ./merge.sh $USERNAME $PASSWORD
 - chmod a+x travis-automerge
-- BRANCHES_TO_MERGE_REGEX='testing' BRANCH_TO_MERGE_INTO=preprod GITHUB_REPO=bofiss/cidrupal /tmp/travis-automerge
-- BRANCHES_TO_MERGE_REGEX='preprod' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=bofiss/cidrupal /tmp/travis-automerge
+- BRANCHES_TO_MERGE_REGEX='testing' BRANCH_TO_MERGE_INTO=preprod GITHUB_REPO=bofiss/cidrupal  travis-automerge
+- BRANCHES_TO_MERGE_REGEX='preprod' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=bofiss/cidrupal   travis-automerge
