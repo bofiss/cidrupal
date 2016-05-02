@@ -35,5 +35,5 @@ env:
 after_success:
 - "curl -o /tmp/travis-automerge https://raw.githubusercontent.com/cdown/travis-automerge/master/travis-automerge"
 - "chmod a+x /tmp/travis-automerge"
-- "BRANCHES_TO_MERGE_REGEX='testing/' BRANCH_TO_MERGE_INTO=preprod GITHUB_REPO=bofiss/cidrupal /tmp/travis-automerge"
-- "BRANCHES_TO_MERGE_REGEX='preprod/' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=bofiss/cidrupal /tmp/travis-automerge"
+- "BRANCHES_TO_MERGE_REGEX='testing' BRANCH_TO_MERGE_INTO=preprod GITHUB_REPO=bofiss/cidrupal /tmp/travis-automerge"
+- "BRANCHES_TO_MERGE_REGEX='preprod' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=bofiss/cidrupal /tmp/travis-automerge"
