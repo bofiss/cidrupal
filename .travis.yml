@@ -32,7 +32,7 @@ before_script:
 - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
 - drush pm-list --type=module --status=enabled | sed '/\((.*)\)/!d;/[Cc]ore.*-.*[Rr]equired/d;s/.*(\(.*\)).*/\1/' | sort > noncoremod.txt
 - drush pm-enable $(cat noncoremod.txt) -y
-
+- drush pm-enable helloworld -y
 - php -S localhost:8080 &
 - cd ..
 - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
@@ -49,5 +49,5 @@ after_success:
 - chmod a+x merge.sh
 - ./merge.sh $USERNAME $PASSWORD
 - chmod a+x travis-automerge
-- BRANCHES_TO_MERGE_REGEX='testing' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=bofiss/cidrupal  travis-automerge
+- BRANCHES_TO_MERGE_REGEX='testing' BRANCH_TO_MERGE_INTO=preprod GITHUB_REPO=bofiss/cidrupal  travis-automerge
 - BRANCHES_TO_MERGE_REGEX='preprod' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=bofiss/cidrupal   travis-automerge
