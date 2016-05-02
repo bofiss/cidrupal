@@ -2,12 +2,20 @@ language: php
 php:
 - 5.6
 - 7
+
 matrix:
   fast_finish: true
 mysql:
   database: cidrupal
   username: roo
   encoding: utf8
+  
+travisdeployer:                  # our deployer config
+    verbose: false               # verbose output the deployment?
+    branches:                    # what branches do you want to deploy?
+        preprod: develop         # deploys stage develop when merging into develop
+        master: production       # deploys stage production when merging into master
+
 before_install:
 - sudo apt-get update > /dev/null
 - export BASEDIR=${PWD}
