@@ -27,14 +27,15 @@ install:
 before_script:
 - mkdir temp
 - cp -R html/sites/all/modules/custom  temp
+- ls temp > custom_module.txt
 - rm -rf html
 - mysql -e 'create database cidupal'
 - drush  make -y --force-complete drupal.make html
+- mv custom_module.txt  html
 - cp -R temp  html/sites/all/modules/custom
 - cd html
 - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
-- drush pml --no-core --type=module --status=disabled --pipe  > noncoremod.txt
-- drush pm-enable $(cat noncoremod.txt) -y
+- drush pm-enable $(cat custom_module.txt) -y
 - drush pm-enable helloworld -y
 - php -S localhost:8080 &
 - cd ..
