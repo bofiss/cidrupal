@@ -29,6 +29,7 @@ before_script:
 - mysql -e 'create database cidupal'
 - drush  make -y --force-complete drupal.make public
 - cp -R html/sites/all/modules/custom  public/sites/all/modules/custom
+- cd public
 - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
 - drush pm-list --type=module --status=enabled | sed '/\((.*)\)/!d;/[Cc]ore.*-.*[Rr]equired/d;s/.*(\(.*\)).*/\1/' | sort > noncoremod.txt
 - drush pm-enable $(cat noncoremod.txt) -y
