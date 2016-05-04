@@ -33,6 +33,7 @@ if [ "$CURRENT_BRANCH" = "$FROM_BRANCH" ] ; then
 
     # Checkout the latest stable
     git fetch origin $TO_BRANCH:$TO_BRANCH && \
+    git add .
     git commit -m "my change" && \
     git checkout $TO_BRANCH && \
 
