@@ -27,6 +27,8 @@ git rebase --preserve-merges "$TRAVIS_COMMIT"
 git checkout "$BRANCH_TO_MERGE_INTO"
 git merge --ff-only "origin/$TRAVIS_BRANCH"
 
+git status
+
 printf 'Pushing to %s\n' "$GITHUB_REPO" >&2
 
 push_uri="https://$GH_TOKEN@github.com/$GITHUB_REPO"
