@@ -31,6 +31,8 @@ if [ "$CURRENT_BRANCH" = "$FROM_BRANCH" ] ; then
     # Checkout the latest stable
     git fetch origin $TO_BRANCH:$TO_BRANCH && \
     git commit -m "my change" && \
+    git config user.email "bofiss@gmail.com" && \
+    git config user.name "bofiss" && \
     git checkout $TO_BRANCH && \
 
     # Merge the dev into latest stable
