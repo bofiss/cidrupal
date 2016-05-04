@@ -1,49 +1,56 @@
 language: php
-
 php:
-  - 5.6
-  - 7
+- 5.6
+- 7
 
 matrix:
   fast_finish: true
-
-
 mysql:
   database: cidrupal
   username: roo
   encoding: utf8
 
+travisdeployer:                  # our deployer config
+    verbose: false               # verbose output the deployment?
+    branches:                    # what branches do you want to deploy?
+        preprod: develop         # deploys stage develop when merging into develop
+        master: production       # deploys stage production when merging into master
+
 before_install:
-  - sudo apt-get update > /dev/null
-  - export BASEDIR=${PWD}
-
+- sudo apt-get update > /dev/null
+- export BASEDIR=${PWD}
 install:
-  # install php packages required for running a web server from drush on php 5.3
-  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
-
-  # add composer's global bin directory to the path
-  # see: https://github.com/drush-ops/drush#install---composer
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-
-  # install drush globally
-  - composer global require drush/drush:6.*
-  - composer install
-
+- sudo apt-get install -y --force-yes php5-cgi php5-mysql
+- export PATH="$HOME/.composer/vendor/bin:$PATH"
+- composer global require drush/drush:6.*
+- composer install
 before_script:
-  # navigate out of module directory to prevent blown stack by recursive module lookup
-
-  # create new site, stubbing sendmail path with true to prevent delivery errors and manually resolving drush path
-  - rm -rf html
-  - mysql -e 'create database cidupal'
-  - drush  make -y --force-complete drupal.make html
-  - cd html
-  - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
-
-  # start a web server on port 8080, run in the background; wait for initialization
-  - php -S localhost:8080 &
-  - cd ..
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
-
+- mkdir temp
+- cp -R html/sites/all/modules/custom  temp
+- ls html/sites/all/modules/custom > custom_module.txt
+- rm -rf html
+- mysql -e 'create database cidupal'
+- drush  make -y --force-complete drupal.make html
+- mv custom_module.txt  html
+- cp -R temp  html/sites/all/modules/custom
+- cd html
+- php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
+- drush pm-enable $(cat custom_module.txt) -y
+- php -S localhost:8080 &
+- cd ..
+- until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 script:
-  - vendor/behat/behat/bin/behat
-  - vendor/phpunit/phpunit/phpunit
+- vendor/behat/behat/bin/behat
+- vendor/phpunit/phpunit/phpunit
+env:
+  global:
+  - secure: bLhWRblUtNoqOhPqc2LuPLzKpMsd8cIiUP02tyxCczHVRmbAa7lLUNkvD84COe/ZogNWtZRbhLjQKp6eWu7LmKd2qs2vfl9V5MqxxoTaCU+h9Du38MyuZQUsO3FSVuD0k60UH8t6mFe5+KDzjYM/i6X/KxCx9//z4FjbZbHoOqDN7tVrGWFte10DGSCCLb9lf36HjdqBMHCwBqZA3DutYLf55Kg0C3ZRH/7XkP9wvDd/KkT7uSN490ekXkKLVXgtEnC9I8EEaL1YfMuIHvfA4YLwpDqZMZqIDMIrh/ZzEAttgTdnjxLiHpqiH7dMf9UiQ2AxeIRq3GiTtKokVUmTKGaVMHiJQiHbx2rzj51Ytsg0oX+QnT6W1PwV2qtKIAXXqXm8iRfEE/u1HiqpKFgqqGPPQHh6TYZh/ZwSN8F2k95foNJZL0NxqJoeKWn1qtz3er6RNhOP2CyOd40fIiO2HWmyYDfl+ViYFHpElIQwVnNxP1GJpfOPQixa6rAQj6HhyaNEhBOvXt9QBpWiXSp/3t91li437UzzJ2EDhLXU7I3GwRxHDF8qYCcYaowDhU2kiEPCHxLfzEiEYFIzr5ipNyBjU7HcuOnPBFCEIMjcW1euY6aLUaK4SQKP8xDdEMvTbMXguxBhHzbwJIgO4lolKuh9hjZSWDwTbvBrEw0gQU0=
+  - secure: LllxtjCrGZijMYoBMDwwMWYvn8OUTIaO2jGispRitKundfiLqrro46of5HnHy0mWIS9mXNLV7e0cJ2SQbOpP+jPFma6yvvS8gcRqZTwLtgXmlNgerqJIcy0WKoql8kUqBj2wCOThOT/plVbWMC7zY3TJmhES2dxealf5wsicbZ/9NNd1j1/L9uVGw0OZaqrf/4QThkJUVK7qDNcLg1xwmRNfS00kd6D6nXT39z4t+rwlXbfNWGJczEP8PmTijUZgY7t98jbLX1OKQ+S/qSVhtKZKTMAAV2fXbARfvzWPigXJekB1P395NqMlRTiUmo5CUPFLms5I60szulfm75+Mu1YzLC8lAsL0WkTdtPrqACxtaS3OZTE1fCMR2Xi7EJrLfwtfQn2MgqqfI6FZO9m5RTRZapOUvfajizsLU/5ZnMNA5ACp8WJ/4PNigqrANRZMjjXqV144vb0OB5ARbRXBAsl/EvshOfdTqtQLsGaB8CrEkGyLDd66SM10/VCGexyZgkss30BN4GSWsFZ5Yx2B6fO/4dbUi/Jmgmu+M2H/EPMvFOQ9e3qSvwRvgDjZMN2QAXkjTguZCIwUYgOe1NFGusUB2uXmnssGV5DG1no4r+wMnuaE9rMCQQRsSqgeMPnK3JEG8UWFFP7lugzDzPe2hN/awe0u55lkhBXJ+GhYd8M=
+  - secure: cCOtwoWfe3SU7w6o8ddaroITMEe9GejQeGE7ZRSRPBMt9ckF/esGSaNsZkrJ9q4NTCHHImRA/bcyfUgydn0GG+Cwb1PEh32+AU6310pQ9n3S8fqx5gbWi/rwCpnhKJStqSVo5+a105B/AqwpTulBS16VRg7TLvrPZC5vTbUKglwopZ+A6OT69Q5b5Z16jId886IGNu11i8paDy3WbWhB1vTKm1qjBUOKNWvRmo7zaVB6kU0Qv9hlI+yQGRR447T9y3brI8fYcrjr/0MCyaiichxfq/y+eGrvSunZ8Znl802x8rOdd7q1R9IBqJ70hjlzasqMtGcehJgrN5SqcJ/yXMNY7cT2Arf5e3/+ETL+zhbO+o2QPlaouCN3Iqu6j0ONEcf24MRHzKU/3+9diLJF2Ynx8dveD/HKy0jPALSw2tSd1RMlNtKnQRe8qo/ivzpUC+SSYrf2mzcug70NL2PAE9IWzVCj2a+YDm3vDw464hzd6cbBOJfkaVHrP1gBxB0kI62R4GY8/WeXGTnvVnXYzH2ur7L1VUvfOn4dtrmtsmBwb612qa9ug90p/DOCeZ7s9u6AYcBCeUTTULPH25XrEbiqtvt/qholvtqIBGtdyGQTXroYwsqckwOxipgGzg66PCL1wl+IluVyLa7P/WphskbCGaTQWrx9qZQrsUhw6nY=
+after_success:
+- vendor/bin/travisdeployer
+- chmod a+x merge.sh
+- ./merge.sh $USERNAME $PASSWORD
+- chmod a+x travis-automerge
+- BRANCHES_TO_MERGE_REGEX='testing' BRANCH_TO_MERGE_INTO=preprod GITHUB_REPO=bofiss/cidrupal  travis-automerge
+- BRANCHES_TO_MERGE_REGEX='preprod' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=bofiss/cidrupal   travis-automerge

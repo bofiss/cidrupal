@@ -1,4 +1,6 @@
 name = Hello world
 description = Hello world module
+package = Custom
+version = VERSION
 core = 7.x
 files[] = helloworld.module

@@ -49,3 +49,6 @@ $_SERVER['HTTP_USER_AGENT'] = NULL;
 define('DRUPAL_ROOT', $drupal_root.'/html');
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
+
+// require autolaod for custom libraies
+require 'vendor/autoload.php';

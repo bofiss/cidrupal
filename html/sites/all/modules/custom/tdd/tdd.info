@@ -1,0 +1,5 @@
+name = TDD
+description = TDD test module.
+package = Custom
+version = VERSION
+core = 7.x
