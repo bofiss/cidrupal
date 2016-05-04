@@ -21,6 +21,7 @@ echo "current branch is '$CURRENT_BRANCH'"
 URL=$(git remote -v | head -n1 | cut -f2 | cut -d" " -f1)
 echo "Repo url is $URL"
 PUSH_URL="https://$GIT_USER:$GIT_PASS@${URL:6}"
+echo "URL to push merge to is $PUSH_URL"
 
 if [ "$CURRENT_BRANCH" = "$FROM_BRANCH" ] ; then
     # Checkout the dev branch
