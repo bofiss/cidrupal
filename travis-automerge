@@ -24,9 +24,8 @@ git checkout "$BRANCH_TO_MERGE_INTO"
 
 printf 'Merging %s\n' "$TRAVIS_COMMIT" >&2
 git rebase --preserve-merges "$TRAVIS_COMMIT"
-git checkout "$BRANCH_TO_MERGE_INTO"
 git merge --ff-only "origin/$TRAVIS_BRANCH"
-
+git pull
 git status
 
 printf 'Pushing to %s\n' "$GITHUB_REPO" >&2
