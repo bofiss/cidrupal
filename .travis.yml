@@ -35,9 +35,7 @@ before_script:
 - cp -R temp  html/sites/all/modules/custom
 - cd html
 - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
-- cat custom_module.txt
 - drush pm-enable $(cat custom_module.txt) -y
-- drush pm-enable helloworld -y
 - php -S localhost:8080 &
 - cd ..
 - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
