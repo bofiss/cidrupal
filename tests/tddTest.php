@@ -29,7 +29,7 @@ class TDDtest extends PHPUnit_Framework_TestCase{
     $words = tdd_search_word($query);
     $this->assertEquals(count($words), 1);
     foreach($words as $word) {
-      $this->assertTrue(stripos($word, $query) >0, "Mot absent ");
+      $this->assertTrue(stripos($word, $query) >0, "Mot absents ");
     }
 
   }
