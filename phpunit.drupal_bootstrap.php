@@ -39,7 +39,7 @@ function guessDrupalRootPath() {
 }
 
 $_SERVER['HTTP_HOST'] = $http_host;
-$_SERVER['SCRIPT_NAME'] = '/html/index.php';
+$_SERVER['SCRIPT_NAME'] = '/public/index.php';
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_SERVER['SERVER_NAME'] = NULL;
