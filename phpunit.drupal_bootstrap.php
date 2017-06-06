@@ -46,6 +46,6 @@ $_SERVER['SERVER_NAME'] = NULL;
 $_SERVER['SERVER_SOFTWARE'] = NULL;
 $_SERVER['HTTP_USER_AGENT'] = NULL;
 
-define('DRUPAL_ROOT', $drupal_root.'/html');
+define('DRUPAL_ROOT', $drupal_root.'/public');
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
