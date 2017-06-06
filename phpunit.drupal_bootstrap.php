@@ -30,7 +30,7 @@ function guessDrupalRootPath() {
   }
 
   while ($path != '/') {
-    if (file_exists($path . '/html/includes/bootstrap.inc')) {
+    if (file_exists($path . '/public/includes/bootstrap.inc')) {
       break;
     }
     $path = dirname($path);
