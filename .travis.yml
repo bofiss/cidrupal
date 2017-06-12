@@ -38,6 +38,7 @@ before_script:
 - cd public
 - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php si -y standard --db-url=mysql://root@localhost/cidrupal --account-name=admin --account-pass=admin
 - drush pm-list --type=module --status=enabled | sed '/\((.*)\)/!d;/[Cc]ore.*-.*[Rr]equired/d;s/.*(\(.*\)).*/\1/' | sort > noncoremod.txt
+- drush sql-cli < $BASEDIR/my-sql-dump-file-name.sql
 - drush pm-enable $(cat noncoremod.txt) -y
 - drush pm-enable helloworld -y
 - php -S localhost:8080 &
