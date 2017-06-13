@@ -2,7 +2,7 @@
   <property name="PROJECT_CODE" value="cidrupal" />
     <target name="db_install">
         <echo message="yep, I will create a database " />
-        <exec command="mysql -e 'create database ${PROJECT_CODE}" checkreturn="true" />
+        <exec command="mysql -e 'create database ${PROJECT_CODE}'" checkreturn="true" />
 
     </target>
 </project>
