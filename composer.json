@@ -15,7 +15,7 @@
         "drupal/coder": "7.2.3",
         "phpunit/phpunit": "~5.2",
         "enrise/travisdeployer": "^0.2.0",
-          "phing/phing": "^2.16"
+        "phing/phing": "2.*"
     },
 
     "config": {
