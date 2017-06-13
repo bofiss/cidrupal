@@ -3,6 +3,6 @@
     <target name="db_install">
         <echo message="yep, I will create a database " />
         <exec command="mysql -e 'create database ${PROJECT_CODE}" checkreturn="true" />
-        <exec command="drush sql-cli < $BASEDIR/my-sql-dump-file-name.sql" checkreturn="true" />
+      
     </target>
 </project>
