@@ -1,8 +1,8 @@
-<project name="cidrupal" basedir="." default="test">
+<project name="cidrupal" basedir="." default="db_install">
   <property name="PROJECT_CODE" value="cidrupal" />
     <target name="db_install">
         <echo message="yep, I will create a database " />
         <exec command="mysql -e 'create database ${PROJECT_CODE}" checkreturn="true" />
-      
+
     </target>
 </project>
